@@ -1,10 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
-# config.env 로드
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# shellcheck source=scripts/config.env
-source "${SCRIPT_DIR}/config.env"
+# 프로젝트 루트의 .env 로드
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+set -a
+# shellcheck source=/dev/null
+source "${PROJECT_DIR}/.env"
+set +a
+
+# .env에 없는 운영 변수 기본값
+: "${LITELLM_URL:=http://localhost:8000}"
+: "${DATA_DIR:=${PROJECT_DIR}/data}"
 
 mkdir -p "${DATA_DIR}"
 
